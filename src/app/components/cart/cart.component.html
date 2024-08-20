@@ -1,74 +1,28 @@
 <div class="p-6 bg-[#FFFFFF] font-redHat rounded-lg">
-  <h1 class="text-2xl font-extrabold mb-4 text-[#C73B0F]">Your Cart (7)</h1>
+  <h1 class="text-2xl font-extrabold mb-4 text-[#C73B0F]">
+    Your Cart ({{ (cartItems$ | async)?.length }})
+  </h1>
+
   <div class="cart-items space-y-4">
-    <div class="cart-item-one flex justify-between items-center border-b pb-2">
+    <div
+      *ngFor="let item of cartItems$ | async"
+      class="cart-item-one flex justify-between items-center border-b pb-2"
+    >
       <div>
-        <p class="font-semibold text-sm mb-1">Classic Tiramisu</p>
+        <p class="font-semibold text-sm mb-1">{{ item.name }}</p>
         <p class="text-xs space-x-1">
-          <span class="text-[#C73B0F] font-bold text-sm">1x </span>
-          <span class="text-[#87635A]">$5.50</span>
-          <span class="font-bold text-[#87635A]">$5.50</span>
+          <span class="text-[#C73B0F] font-bold text-sm"
+            >{{ item.quantity }}x
+          </span>
+          <span class="text-[#87635A]">${{ item.price }}</span>
+          <span class="font-bold text-[#87635A]">
+            ${{ item.price * item.quantity }}
+          </span>
         </p>
       </div>
-      <button
-        class="border border-[#AD8A85] text-[#87635A] rounded-full p-1 hover:border-[#000000] hover:text-[#000000]"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-    </div>
 
-    <div class="cart-item-one flex justify-between items-center border-b pb-2">
-      <div>
-        <p class="font-semibold text-sm mb-1">Vanilla Bean Creme Brulee</p>
-        <p class="text-xs space-x-1">
-          <span class="text-[#C73B0F] font-bold text-sm">4x </span>
-          <span class="text-[#87635A]">$7.00</span>
-          <span class="font-bold text-[#87635A]">$28.00</span>
-        </p>
-      </div>
       <button
-        class="border border-[#AD8A85] text-[#87635A] rounded-full p-1 hover:border-[#000000] hover:text-[#000000]"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <div class="cart-item-one flex justify-between items-center border-b pb-2">
-      <div>
-        <p class="font-semibold text-sm mb-1">Vanilla Panna Cotta</p>
-        <p class="text-xs space-x-1">
-          <span class="text-[#C73B0F] font-bold text-sm">2x </span>
-          <span class="text-[#87635A]">$6.50</span>
-          <span class="font-bold text-[#87635A]">$13.00</span>
-        </p>
-      </div>
-      <button
+        (click)="removeItem(item.id)"
         class="border border-[#AD8A85] text-[#87635A] rounded-full p-1 hover:border-[#000000] hover:text-[#000000]"
       >
         <svg
@@ -90,8 +44,9 @@
 
     <div class="total flex justify-between font-bold text-sm mt-4">
       <p>Order Total</p>
-      <p>$46.50</p>
+      <p>${{ (total$ | async)?.toFixed(2) }}</p>
     </div>
+
     <div
       class="cart-category mt-2 bg-[#FCF8F6] p-4 rounded-lg flex items-center space-x-2 cursor-pointer"
     >
