@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { CartService } from '../../services/cart.service';
+import { CartItem } from '../../models/cart-item';
 
 @Component({
   selector: 'app-cart',
@@ -8,7 +9,7 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  cartItems$: Observable<any[]> = of([]);
+  cartItems$: Observable<CartItem[]> = of([]);
   total$: Observable<number> = of(0);
   isModalVisible: boolean = false;
 

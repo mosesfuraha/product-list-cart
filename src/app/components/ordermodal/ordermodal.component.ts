@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { Observable } from 'rxjs';
+import { CartItem } from '../../models/cart-item';
 
 @Component({
   selector: 'app-ordermodal',
@@ -13,7 +14,7 @@ export class OrdermodalComponent {
   @Output() confirm = new EventEmitter<void>();
   @Output() newOrder = new EventEmitter<void>();
 
-  cartItems$: Observable<any[]>;
+  cartItems$: Observable<CartItem[]>;
   total$: Observable<number>;
 
   constructor(private cartService: CartService) {

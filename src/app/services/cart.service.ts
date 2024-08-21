@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { CartItem } from '../models/cart-item';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private cartItemsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(
-    []
-  );
-  cartItems$: Observable<any[]> = this.cartItemsSubject.asObservable();
+  private cartItemsSubject: BehaviorSubject<CartItem[]> = new BehaviorSubject<
+    CartItem[]
+  >([]);
+  cartItems$: Observable<CartItem[]> = this.cartItemsSubject.asObservable();
 
   constructor() {}
 
-  getCartItems(): Observable<any[]> {
+  getCartItems(): Observable<CartItem[]> {
     return this.cartItems$;
   }
 
-  addToCart(product: any): void {
+  addToCart(product: CartItem): void {
     const items = [...this.cartItemsSubject.value];
 
     const existingProductIndex = items.findIndex(
@@ -35,7 +36,7 @@ export class CartService {
     this.cartItemsSubject.next(items);
   }
 
-  updateCartItem(updatedProduct: any): void {
+  updateCartItem(updatedProduct: CartItem): void {
     const items = [...this.cartItemsSubject.value];
 
     const existingProductIndex = items.findIndex(
@@ -65,7 +66,7 @@ export class CartService {
 
   getTotal(): Observable<number> {
     return this.cartItems$.pipe(
-      map((items: any[]) =>
+      map((items: CartItem[]) =>
         items.reduce((total, item) => total + item.price * item.quantity, 0)
       )
     );

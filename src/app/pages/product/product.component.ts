@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { CartItem, ProductItem } from '../../models/cart-item';
 
 @Component({
   selector: 'app-product',
@@ -9,8 +10,8 @@ import { map, take } from 'rxjs/operators';
   styleUrls: ['./product.component.css'],
 })
 export class ProductComponent implements OnInit {
-  products: any[] = [];
-  cartItems$: Observable<any[]>;
+  products: ProductItem[] = [];
+  cartItems$: Observable<CartItem[]>;
 
   constructor(private cartService: CartService) {
     this.cartItems$ = this.cartService.getCartItems();
@@ -23,25 +24,31 @@ export class ProductComponent implements OnInit {
   loadProducts(): void {
     fetch('./data.json')
       .then((response) => response.json())
-      .then((data) => {
+      .then((data: ProductItem[]) => {
         this.products = data;
       })
       .catch((error) => {
-        return error;
+        console.error('Failed to load products', error);
       });
   }
 
-  addToCart(product: any): void {
-    this.cartService.addToCart(product);
+  addToCart(product: ProductItem): void {
+    const cartItem: CartItem = {
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: product.image,
+    };
+    this.cartService.addToCart(cartItem);
   }
 
-  isInCart(product: any): Observable<boolean> {
+  isInCart(product: ProductItem): Observable<boolean> {
     return this.cartItems$.pipe(
       map((items) => items.some((item) => item.name === product.name))
     );
   }
 
-  getQuantity(product: any): Observable<number> {
+  getQuantity(product: ProductItem): Observable<number> {
     return this.cartItems$.pipe(
       map((items) => {
         const cartItem = items.find((item) => item.name === product.name);
@@ -50,7 +57,7 @@ export class ProductComponent implements OnInit {
     );
   }
 
-  incrementQuantity(product: any): void {
+  incrementQuantity(product: ProductItem): void {
     this.cartItems$
       .pipe(
         take(1),
@@ -67,7 +74,7 @@ export class ProductComponent implements OnInit {
       });
   }
 
-  decrementQuantity(product: any): void {
+  decrementQuantity(product: ProductItem): void {
     this.cartItems$
       .pipe(
         take(1),
@@ -82,7 +89,7 @@ export class ProductComponent implements OnInit {
             };
             this.cartService.updateCartItem(updatedCartItem);
           } else {
-            this.cartService.removeFromCart(product.name);
+            this.cartService.removeFromCart(cartItem.name);
           }
         }
       });
