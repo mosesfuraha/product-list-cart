@@ -25,11 +25,11 @@
       >
         <div>
           <p class="font-semibold text-sm mb-1">{{ item.name }}</p>
-          <p class="text-xs space-x-1">
-            <span class="text-[#C73B0F] font-bold text-sm"
+          <p class="text-xs">
+            <span class="text-[#C73B0F] font-bold text-sm mr-2"
               >{{ item.quantity }}x</span
             >
-            <span class="text-[#87635A]">${{ item.price }}</span>
+            <span class="text-[#87635A] mr-4">&#64;${{ item.price }}</span>
             <span class="font-bold text-[#87635A]"
               >${{ item.price * item.quantity }}</span
             >
