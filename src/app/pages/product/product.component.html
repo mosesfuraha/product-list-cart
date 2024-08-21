@@ -1,4 +1,4 @@
-<div class="flex flex-col lg:flex-row p-4 lg:p-11 font-redHat">
+<div class="flex flex-col lg:flex-row p-4 lg:p-11 font-redHat md:p-10">
   <div class="flex flex-col w-full lg:w-[90%]">
     <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#260F08] mb-4">
       Desserts
@@ -30,21 +30,27 @@
         <div class="relative mt-2">
           <ng-container *ngIf="isInCart(product) | async; else addToCartButton">
             <div
-              class="absolute bottom-[-20px] bg-[#C73B0F] left-1/2 transform -translate-x-1/2 p-2 w-[85%] rounded-3xl border flex items-center justify-center font-[500] text-white"
+              class="absolute bottom-[-20px] bg-[#C73B0F] left-1/2 transform -translate-x-1/2 p-2 w-[85%] rounded-3xl border flex items-center justify-between font-[500] text-white mr-7"
             >
-              <button (click)="decrementQuantity(product)" class="p-1">
+              <button
+                (click)="decrementQuantity(product)"
+                class="p-1 border border-white rounded-full"
+              >
                 <img
                   src="/assets/images/icon-decrement-quantity.svg"
                   alt="Decrease quantity"
-                  class="w-4 h-4"
+                  class="w-2 h-2"
                 />
               </button>
               <span class="mx-4">{{ getQuantity(product) | async }}</span>
-              <button (click)="incrementQuantity(product)" class="p-1">
+              <button
+                (click)="incrementQuantity(product)"
+                class="p-1 border border-white rounded-full"
+              >
                 <img
                   src="/assets/images/icon-increment-quantity.svg"
                   alt="Increase quantity"
-                  class="w-4 h-4"
+                  class="w-2 h-2"
                 />
               </button>
             </div>
@@ -53,7 +59,7 @@
           <ng-template #addToCartButton>
             <button
               (click)="addToCart(product)"
-              class="absolute bottom-[-20px] bg-[#FCF8F6] left-1/2 transform -translate-x-1/2 p-2 w-[85%] rounded-3xl border border-black flex items-center justify-center hover:text-[#C73B0F] font-[500]"
+              class="absolute bottom-[-20px] bg-[#FCF8F6] lg:w-[85%] md:w-[70%] sm:w-[60%] left-1/2 transform -translate-x-1/2 p-2 rounded-3xl border border-black flex items-center justify-center hover:text-[#C73B0F] font-[500]"
             >
               <img
                 src="/assets/images/icon-add-to-cart.svg"
