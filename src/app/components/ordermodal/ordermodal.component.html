@@ -1,0 +1,79 @@
+<div
+  *ngIf="isVisible"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+>
+  <div
+    class="relative bg-white p-4 rounded-lg shadow-lg max-w-md w-full mx-auto transform transition-all duration-500 ease-in-out scale-0 origin-bottom"
+    [ngClass]="{ 'scale-100': isVisible }"
+  >
+    <div class="flex mb-3">
+      <img
+        src="/assets/images/icon-order-confirmed.svg"
+        alt="Order Confirmed Icon"
+        class="w-10 h-10"
+      />
+    </div>
+
+    <h1 class="text-xl font-[900] text-[#260F08] mb-2">Order Confirmed</h1>
+    <p class="text-gray-600 mb-4 text-sm">We hope you enjoyed the food!</p>
+
+    <div *ngIf="cartItems$ | async as cartItems; else emptyCart">
+      <div *ngIf="cartItems.length > 0; else emptyCart">
+        <div class="max-h-60 overflow-y-auto bg-[#FCF8F6] p-4 rounded-lg">
+          <div
+            *ngFor="let item of cartItems"
+            class="flex justify-between items-center mb-3 border-b border-gray-300 pb-3 last:border-none"
+          >
+            <div class="flex items-center">
+              <img
+                src="{{ item.image.thumbnail }}"
+                [srcset]="
+                  item.image.mobile +
+                  ' 480w, ' +
+                  item.image.tablet +
+                  ' 768w, ' +
+                  item.image.desktop +
+                  ' 1200w'
+                "
+                sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
+                alt="{{ item.name }}"
+                class="w-10 h-auto object-cover rounded-lg mr-3"
+              />
+              <div>
+                <p class="font-semibold text-xs text-gray-700">
+                  {{ item.name }}
+                </p>
+                <p class="text-xs text-[#260F08]">
+                  <span class="text-[#C73B0F]"> {{ item.quantity }} x</span> ${{
+                    item.price.toFixed(2)
+                  }}
+                </p>
+              </div>
+            </div>
+            <p class="font-bold text-xs text-gray-700">
+              ${{ (item.price * item.quantity).toFixed(2) }}
+            </p>
+          </div>
+        </div>
+
+        <div class="total flex justify-between font-bold text-base mt-4">
+          <p>Total</p>
+          <p>${{ (total$ | async)?.toFixed(2) }}</p>
+        </div>
+
+        <div class="flex justify-center mt-4">
+          <button
+            (click)="startNewOrder()"
+            class="w-full max-w-xs bg-[#C73B0F] text-white py-2 rounded-lg hover:bg-[#c73a0fcd] transition-colors text-sm"
+          >
+            Start New Order
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyCart>
+      <p class="text-sm text-center">Your cart is empty.</p>
+    </ng-template>
+  </div>
+</div>

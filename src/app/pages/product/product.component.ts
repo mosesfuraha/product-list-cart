@@ -27,7 +27,7 @@ export class ProductComponent implements OnInit {
         this.products = data;
       })
       .catch((error) => {
-        console.error('Error loading products:', error);
+        return error;
       });
   }
 
@@ -37,14 +37,14 @@ export class ProductComponent implements OnInit {
 
   isInCart(product: any): Observable<boolean> {
     return this.cartItems$.pipe(
-      map((items) => items.some((item) => item.id === product.id))
+      map((items) => items.some((item) => item.name === product.name))
     );
   }
 
   getQuantity(product: any): Observable<number> {
     return this.cartItems$.pipe(
       map((items) => {
-        const cartItem = items.find((item) => item.id === product.id);
+        const cartItem = items.find((item) => item.name === product.name);
         return cartItem ? cartItem.quantity : 0;
       })
     );
@@ -54,7 +54,7 @@ export class ProductComponent implements OnInit {
     this.cartItems$
       .pipe(
         take(1),
-        map((items) => items.find((item) => item.id === product.id))
+        map((items) => items.find((item) => item.name === product.name))
       )
       .subscribe((cartItem) => {
         if (cartItem) {
@@ -71,7 +71,7 @@ export class ProductComponent implements OnInit {
     this.cartItems$
       .pipe(
         take(1),
-        map((items) => items.find((item) => item.id === product.id))
+        map((items) => items.find((item) => item.name === product.name))
       )
       .subscribe((cartItem) => {
         if (cartItem) {
@@ -82,7 +82,7 @@ export class ProductComponent implements OnInit {
             };
             this.cartService.updateCartItem(updatedCartItem);
           } else {
-            this.cartService.removeFromCart(product.id);
+            this.cartService.removeFromCart(product.name);
           }
         }
       });

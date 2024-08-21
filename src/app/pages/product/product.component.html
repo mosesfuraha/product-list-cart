@@ -5,7 +5,13 @@
     </h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <div *ngFor="let product of products" class="overflow-hidden relative">
-        <div class="relative flex-1">
+        <div
+          class="relative flex-1"
+          [ngClass]="{
+            'border-[#C73B0F]': (isInCart(product) | async),
+            'border-transparent': !(isInCart(product) | async)
+          }"
+        >
           <img
             [src]="product.image.thumbnail"
             [srcset]="
@@ -18,7 +24,7 @@
             "
             sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
             alt="{{ product.name }}"
-            class="w-full h-auto object-cover rounded-lg"
+            class="w-[300px] h-[200px] object-cover rounded-lg mx-auto"
           />
         </div>
         <div class="relative mt-2">
@@ -34,7 +40,7 @@
                 />
               </button>
               <span class="mx-4">{{ getQuantity(product) | async }}</span>
-              <button (click)="incrementQuantity(product)" class="p-1 space-x-4">
+              <button (click)="incrementQuantity(product)" class="p-1">
                 <img
                   src="/assets/images/icon-increment-quantity.svg"
                   alt="Increase quantity"
@@ -43,6 +49,7 @@
               </button>
             </div>
           </ng-container>
+
           <ng-template #addToCartButton>
             <button
               (click)="addToCart(product)"

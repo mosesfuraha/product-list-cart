@@ -1,67 +1,92 @@
 <div class="p-6 bg-[#FFFFFF] font-redHat rounded-lg">
-  <h1 class="text-2xl font-extrabold mb-4 text-[#C73B0F]">
-    Your Cart ({{ (cartItems$ | async)?.length }})
-  </h1>
+  <ng-container *ngIf="cartItems$ | async as cartItems">
+    <h1 class="text-2xl font-extrabold mb-4 text-[#C73B0F]">
+      Your Cart ({{ cartItems.length || 0 }})
+    </h1>
 
-  <div class="cart-items space-y-4">
     <div
-      *ngFor="let item of cartItems$ | async"
-      class="cart-item-one flex justify-between items-center border-b pb-2"
+      *ngIf="cartItems.length === 0"
+      class="p-4 flex items-center justify-center flex-col"
     >
-      <div>
-        <p class="font-semibold text-sm mb-1">{{ item.name }}</p>
-        <p class="text-xs space-x-1">
-          <span class="text-[#C73B0F] font-bold text-sm"
-            >{{ item.quantity }}x
-          </span>
-          <span class="text-[#87635A]">${{ item.price }}</span>
-          <span class="font-bold text-[#87635A]">
-            ${{ item.price * item.quantity }}
-          </span>
-        </p>
+      <img
+        src="assets/images/illustration-empty-cart.svg"
+        alt="SVG Image"
+        class="w-32 h-32"
+      />
+      <div class="text-sm font-[900] text-[#87635A]">
+        Your added text will appear here
+      </div>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="cart-items space-y-4">
+      <div
+        *ngFor="let item of cartItems"
+        class="cart-item-one flex justify-between items-center border-b pb-2"
+      >
+        <div>
+          <p class="font-semibold text-sm mb-1">{{ item.name }}</p>
+          <p class="text-xs space-x-1">
+            <span class="text-[#C73B0F] font-bold text-sm"
+              >{{ item.quantity }}x</span
+            >
+            <span class="text-[#87635A]">${{ item.price }}</span>
+            <span class="font-bold text-[#87635A]"
+              >${{ item.price * item.quantity }}</span
+            >
+          </p>
+        </div>
+
+        <button
+          (click)="removeItem(item.name)"
+          class="border border-[#AD8A85] text-[#87635A] rounded-full p-1 hover:border-[#000000] hover:text-[#000000]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="total flex justify-between font-bold text-sm mt-4">
+        <p>Order Total</p>
+        <p *ngIf="total$ | async as total">${{ total.toFixed(2) }}</p>
+      </div>
+
+      <div
+        class="cart-category mt-2 bg-[#FCF8F6] p-4 rounded-lg flex items-center space-x-2 cursor-pointer"
+      >
+        <img
+          src="/assets/images/icon-carbon-neutral.svg"
+          alt="Carbon Neutral Delivery"
+          class="w-5 h-5"
+        />
+        <p class="text-sm font-semibold">This is a carbon-neutral delivery</p>
       </div>
 
       <button
-        (click)="removeItem(item.id)"
-        class="border border-[#AD8A85] text-[#87635A] rounded-full p-1 hover:border-[#000000] hover:text-[#000000]"
+        class="mt-4 w-full bg-[#C73B0F] text-white py-2 rounded-lg hover:bg-[#b1300a]"
+        (click)="showOrderModal()"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        Confirm Order
       </button>
     </div>
-
-    <div class="total flex justify-between font-bold text-sm mt-4">
-      <p>Order Total</p>
-      <p>${{ (total$ | async)?.toFixed(2) }}</p>
-    </div>
-
-    <div
-      class="cart-category mt-2 bg-[#FCF8F6] p-4 rounded-lg flex items-center space-x-2 cursor-pointer"
-    >
-      <img
-        src="/assets/images/icon-carbon-neutral.svg"
-        alt="Carbon Neutral Delivery"
-        class="w-5 h-5"
-      />
-      <p class="text-sm font-semibold">This is a carbon-neutral delivery</p>
-    </div>
-
-    <button
-      class="mt-4 w-full bg-[#C73B0F] text-white py-2 rounded-lg hover:bg-[#b1300a]"
-    >
-      Confirm Order
-    </button>
-  </div>
+  </ng-container>
 </div>
+
+<app-ordermodal
+  [isVisible]="isModalVisible"
+  (close)="closeOrderModal()"
+  (confirm)="confirmOrder()"
+  (newOrder)="handleNewOrder()"
+></app-ordermodal>
+

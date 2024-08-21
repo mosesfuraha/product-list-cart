@@ -20,7 +20,7 @@ export class CartService {
     const items = [...this.cartItemsSubject.value];
 
     const existingProductIndex = items.findIndex(
-      (item) => item.id === product.id
+      (item) => item.name === product.name
     );
 
     if (existingProductIndex !== -1) {
@@ -28,10 +28,8 @@ export class CartService {
         ...items[existingProductIndex],
         quantity: items[existingProductIndex].quantity + 1,
       };
-      console.log('Updated product quantity:', items[existingProductIndex]);
     } else {
       items.push({ ...product, quantity: 1 });
-      console.log('Added new product to cart:', product);
     }
 
     this.cartItemsSubject.next(items);
@@ -41,7 +39,7 @@ export class CartService {
     const items = [...this.cartItemsSubject.value];
 
     const existingProductIndex = items.findIndex(
-      (item) => item.id === updatedProduct.id
+      (item) => item.name === updatedProduct.name
     );
 
     if (existingProductIndex !== -1) {
@@ -49,16 +47,14 @@ export class CartService {
         ...items[existingProductIndex],
         ...updatedProduct,
       };
-      console.log('Updated cart item:', items[existingProductIndex]);
+
       this.cartItemsSubject.next(items);
-    } else {
-      console.warn('Product not found in cart:', updatedProduct);
     }
   }
 
-  removeFromCart(productId: number): void {
+  removeFromCart(productName: string): void {
     const items = this.cartItemsSubject.value.filter(
-      (item) => item.id !== productId
+      (item) => item.name !== productName
     );
     this.cartItemsSubject.next(items);
   }

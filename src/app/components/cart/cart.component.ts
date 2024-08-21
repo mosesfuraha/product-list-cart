@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CartService } from '../../services/cart.service';
 
 @Component({
@@ -8,18 +8,33 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  cartItems$: Observable<any[]>;
-  total$: Observable<number>;
+  cartItems$: Observable<any[]> = of([]);
+  total$: Observable<number> = of(0);
+  isModalVisible: boolean = false;
 
-  constructor(private cartService: CartService) {
+  constructor(private cartService: CartService) {}
+
+  ngOnInit(): void {
     this.cartItems$ = this.cartService.getCartItems();
-
     this.total$ = this.cartService.getTotal();
   }
 
-  ngOnInit(): void {}
+  removeItem(productName: string): void {
+    this.cartService.removeFromCart(productName);
+  }
 
-  removeItem(productId: number): void {
-    this.cartService.removeFromCart(productId);
+  showOrderModal() {
+    this.isModalVisible = true;
+  }
+
+  closeOrderModal() {
+    this.isModalVisible = false;
+  }
+
+  confirmOrder() {
+    this.closeOrderModal();
+  }
+  handleNewOrder() {
+    this.isModalVisible = true;
   }
 }
