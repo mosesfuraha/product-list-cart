@@ -30,7 +30,7 @@
         <div class="relative mt-2">
           <ng-container *ngIf="isInCart(product) | async; else addToCartButton">
             <div
-              class="absolute bottom-[-20px] bg-[#C73B0F] left-1/2 transform -translate-x-1/2 p-2 w-[85%] rounded-3xl border flex items-center justify-between font-[500] text-white mr-7"
+              class="absolute bottom-[-20px] bg-[#C73B0F] left-1/2 transform -translate-x-1/2 p-2 lg:w-[85%] md:w-[70%] sm:w-[60%] rounded-3xl border flex items-center justify-between font-[500] text-white mr-7"
             >
               <button
                 (click)="decrementQuantity(product)"

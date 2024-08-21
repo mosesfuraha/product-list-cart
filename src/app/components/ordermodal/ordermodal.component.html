@@ -1,10 +1,10 @@
 <div
   *ngIf="isVisible"
-  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+  class="fixed inset-0 flex items-end md:items-center justify-center bg-black bg-opacity-50"
 >
   <div
-    class="relative bg-white p-4 rounded-lg shadow-lg md:w-[75%] w-full mx-auto transform transition-all duration-500 ease-in-out scale-0 origin-bottom"
-    [ngClass]="{ 'scale-100': isVisible }"
+    class="relative bg-white p-4 rounded-lg shadow-lg w-full md:h-auto md:w-[65%] lg:w-[30%] mx-auto transform transition-transform duration-500 ease-in-out translate-y-full md:translate-y-0"
+    [ngClass]="{ 'translate-y-0': isVisible, 'translate-y-full': !isVisible }"
   >
     <div class="flex mb-3">
       <img
@@ -61,7 +61,7 @@
           <p>${{ (total$ | async)?.toFixed(2) }}</p>
         </div>
 
-        <div class="flex justify-center mt-4">
+        <div class="flex justify-center mt-4 p-7">
           <button
             (click)="startNewOrder()"
             class="w-full max-w-xs bg-[#C73B0F] text-white py-2 rounded-lg hover:bg-[#c73a0fcd] transition-colors text-sm"
